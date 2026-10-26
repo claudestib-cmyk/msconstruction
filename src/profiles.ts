@@ -20,7 +20,7 @@ export type CardProfile = {
   name: string
   role: string
   company: string
-  bio: string
+  bio?: string
   location?: string
   initials: string
   avatarUrl?: string
@@ -30,46 +30,49 @@ export type CardProfile = {
   phone?: string
   website?: string
   socials: Partial<Record<SocialKey, string>>
+  socialAccounts: {
+    name: string
+    platforms: { key: SocialKey; url: string }[]
+  }[]
 }
 
 export const profiles: CardProfile[] = [
   {
-    // PERSONAL PROFILE
     slug: 'my-profile',
 
-    // BASIC INFORMATION
-    name: 'Steven Claude B. Jumao-as',
-    role: 'Full Stack Web Developer | Founder of Tapiq',
+    name: 'Mafel D. Solon',
+    role: 'Proprietor',
     company: 'Tapiq',
-
-    // SHORT INTRODUCTION
     bio: 'Computer Engineering graduate, web developer, and founder of Tapiq. Passionate about building digital experiences and smart solutions that make everyday connections simpler.',
-
-    // LOCATION
-    location: 'Bohol, Philippines',
-
-    // PROFILE PHOTO
-    initials: 'ME',
-
+    location: 'The Crescent Autospa & Café, H. Zamora St., Lanao, Dao, Tagbilaran City',
+    initials: 'MS',
     avatarUrl: '/profile.png',
-
-    coverUrl: '/background.png',
-
-    // BRAND COLOR
+    coverUrl: '/bgmsconstruct.png',
     accent: '#2563eb',
-
-    // CONTACT INFORMATION
-    email: 'claudesteven.jumaoas@gmail.com',
-    phone: '+639910348459',
-    website: 'https://steven-claude.vercel.app/',
-
-    // SOCIAL MEDIA LINKS
-    socials: {
-      facebook: 'https://www.facebook.com/stevenclaude.jumaoas.1/',
-      instagram: 'https://www.instagram.com/steven_klud/',
-      tiktok: 'https://www.tiktok.com/@stib_fox',
-      linkedin: 'https://www.linkedin.com/in/steven-claude-jumao-as-99475a3a7/',
-    },
+    phone: '09755134987',
+    socials: {},
+    socialAccounts: [
+      {
+        name: 'Ms Construction',
+        platforms: [{ key: 'facebook', url: 'https://www.facebook.com/msconservices/' }],
+      },
+      {
+        name: 'Ms design & build',
+        platforms: [{ key: 'instagram', url: 'https://www.instagram.com/msdesign.build/' }],
+      },
+      {
+        name: 'The Crescent - Bilar',
+        platforms: [{ key: 'facebook', url: 'https://www.facebook.com/dcrescentcafe' }],
+      },
+      {
+        name: 'The Crescent Café & Autospa',
+        platforms: [
+          { key: 'facebook', url: 'https://www.facebook.com/crescentautospacafe' },
+          { key: 'instagram', url: 'https://www.instagram.com/crescentautospa.cafe/' },
+          { key: 'tiktok', url: 'https://www.tiktok.com/@the_crescentcafe' },
+        ],
+      },
+    ],
   },
 ]
 

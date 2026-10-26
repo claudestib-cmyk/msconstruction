@@ -47,7 +47,7 @@ const vcard = (p: CardProfile) => {
     'BEGIN:VCARD', 'VERSION:3.0',
     `N:${escapeVcf(last)};${escapeVcf(first)};;;`,
     `FN:${escapeVcf(p.name)}`,
-    `ORG:${escapeVcf(p.company)}`,
+    ...(p.company ? [`ORG:${escapeVcf(p.company)}`] : []),
     `TITLE:${escapeVcf(p.role)}`,
     ...(p.phone ? [`TEL;TYPE=CELL:${p.phone}`] : []),
     ...(p.email ? [`EMAIL;TYPE=INTERNET:${p.email}`] : []),
@@ -71,12 +71,8 @@ function Brand({ light = false }: { light?: boolean }) {
 }
 function Profile({ p }: { p: CardProfile }) {
   const [copied, setCopied] = useState(false)
-  // Show configured social links in a predictable order.
-  const featured: SocialKey[] = ['facebook', 'tiktok', 'instagram', 'googleBusiness', 'whatsapp', 'linkedin', 'youtube']
-  const socials = featured.filter(key => safeLink(p.socials[key]))
   const website = safeLink(p.website)
   const phone = p.phone?.replace(/[^\d+]/g, '')
-  const messenger = 'https://m.me/stevenclaude.jumaoas.1'
   const share = async () => {
     try { await navigator.clipboard.writeText(window.location.href); setCopied(true); setTimeout(()=>setCopied(false), 2200) }
     catch { setCopied(false) }
@@ -90,24 +86,25 @@ function Profile({ p }: { p: CardProfile }) {
       <div className="profile-body">
         {!p.avatarUrl && <div className="avatar">{p.initials}</div>}
         <div className="profile-heading"><div className="verified"><ShieldCheck size={14}/> DIGITAL PROFILE</div><h1>{p.name}</h1><p className="job-title">{p.role}</p>{p.location && <p className="location"><MapPin size={14}/>{p.location}</p>}</div>
-        <p className="bio">{p.bio}</p>
+        {p.bio && <p className="bio">{p.bio}</p>}
         <button className="primary-cta" onClick={()=>downloadContact(p)}><UserRound size={18}/> Save to contacts <ArrowDownToLine size={16}/></button>
         <section className="section"><div className="section-head"><h2>Get in touch</h2><span>LET'S CONNECT</span></div><div className="action-list">
           {phone && <a href={`tel:${phone}`} className="action-row"><span className="action-icon"><Phone size={19}/></span><span className="action-text"><strong>Call</strong><small>{p.phone}</small></span><ArrowRight className="action-arrow" size={18}/></a>}
           {phone && <a href={`sms:${phone}`} className="action-row"><span className="action-icon"><MessageCircle size={19}/></span><span className="action-text"><strong>Text / SMS</strong><small>{p.phone}</small></span><ArrowRight className="action-arrow" size={18}/></a>}
+          <a href="https://m.me/msconservices" target="_blank" rel="noopener noreferrer" className="action-row"><span className="action-icon"><MessengerIcon size={21}/></span><span className="action-text"><strong>Messenger</strong><small>Message me on Facebook</small></span><ArrowRight className="action-arrow" size={18}/></a>
           {p.email && <a href={`https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(p.email)}`} target="_blank" rel="noopener noreferrer" className="action-row"><span className="action-icon"><Mail size={19}/></span><span className="action-text"><strong>Send email</strong><small>{p.email}</small></span><ArrowRight className="action-arrow" size={18}/></a>}
-          <a href={messenger} target="_blank" rel="noopener noreferrer" className="action-row"><span className="action-icon"><MessengerIcon size={21}/></span><span className="action-text"><strong>Messenger</strong><small>Message me on Facebook</small></span><ArrowRight className="action-arrow" size={18}/></a>
           {website && <a href={website} target="_blank" rel="noopener noreferrer" className="action-row"><span className="action-icon"><Globe2 size={19}/></span><span className="action-text"><strong>Visit website</strong><small>{new URL(website).hostname}</small></span><ExternalLink className="action-arrow" size={18}/></a>}
           {!phone && !p.email && !website && <div className="empty-message">Contact details coming soon.</div>}
         </div></section>
         <section className="section social-section"><div className="section-head"><h2>Socials</h2><span>FIND ME ONLINE</span></div>
-          {socials.length ? <div className="social-grid">{socials.map((key)=>{
-            const {Icon,label}=socialMeta[key]
-            const url = safeLink(p.socials[key])
-            return url
-              ? <a key={key} className="social-tile" href={url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${label}`}><Icon size={22} aria-hidden="true"/></a>
-              : <div key={key} className="social-tile social-tile-disabled" role="img" aria-label={`${label} — link not configured`}><Icon size={22} aria-hidden="true"/></div>
-          })}</div> : <div className="empty-message">Add social link fields in src/profiles.ts to show buttons.</div>}
+          <div className="social-account-list">{p.socialAccounts.map((account) => <div className="social-account" key={account.name}>
+            <div className="social-account-details"><strong>{account.name}</strong><small>{account.platforms.map((platform) => socialMeta[platform.key].label).join(' · ')}</small></div>
+            <div className="social-account-icons">{account.platforms.map((platform) => {
+              const { Icon, label } = socialMeta[platform.key]
+              const url = safeLink(platform.url)
+              return url && <a key={platform.key} href={url} target="_blank" rel="noopener noreferrer" title={`${account.name} on ${label}`} aria-label={`Open ${account.name} on ${label}`}><Icon size={20} aria-hidden="true"/></a>
+            })}</div>
+          </div>)}</div>
         </section>
       </div><div className="card-footer"><span>Connected with</span><Brand/><span className="footer-tagline">ONE TAP. ENDLESS CONNECTIONS.</span></div>
     </div><p className="privacy-note"><CreditCard size={15}/> Contact information is shared by the profile owner.</p></main>

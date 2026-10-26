@@ -25,7 +25,16 @@
 .social-tile-disabled:hover{transform:none;border-color:#e9eef6}
 .primary-cta{width:fit-content;margin:0 auto;padding:11px 15px;font-size:13px;gap:8px}
 
-.cover{height:340px;background-color:#0b1c30;background-position:center 48%;background-size:cover;isolation:isolate}
+.cover{height:340px;background-color:#0b1c30;background-position:center 65%;background-size:cover;isolation:isolate}
 .cover::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(0deg,#0b1c30a8 0%,transparent 36%),linear-gradient(90deg,#0b1c3030,transparent 22% 78%,#0b1c3030)}
-.cover-portrait{position:absolute;z-index:2;left:50%;bottom:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;transform:translateX(-50%);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 68%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 68%,transparent 100%)}
+.cover-portrait{position:absolute;z-index:2;left:50%;bottom:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;transform:translate(-50%,35px);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 68%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 68%,transparent 100%)}
 @media(max-width:500px){.cover{height:310px}.cover-portrait{width:110%}}
+
+.location{align-items:flex-start;line-height:1.5}
+.location svg{flex-shrink:0;margin-top:1px}
+.social-account-list{display:grid;gap:9px}
+.social-account{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #e9eef6;border-radius:12px;padding:13px}
+.social-account-details{display:flex;flex-direction:column;gap:4px;min-width:0}
+.social-account-details strong{font-size:12px}
+.social-account-details small{font-size:10px;color:#8b99ad}
+.social-account-icons{display:flex;align-items:center;gap:11px;flex-shrink:0;color:var(--accent)}
